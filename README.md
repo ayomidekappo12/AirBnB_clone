@@ -1,2 +1,13 @@
-0x00. AirBnB clone - The console project
-this is a wonderful project
+# AirBnB clone - The console project
+
+
+
+<p align="center">This project acknowledges the ALX SE programme and contributors.</p>
+
+<p align="center">
+<a href="https://github.com/ayomidekappo12/AirBnB_clone/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ayomidekappo12/AirBnB_clone" />
+</a>
+</p>
+
+Made with [contrib.rocks](https://contrib.rocks).
