@@ -1,6 +1,8 @@
-# AirBnB clone - The console project
+# AirBnB clone - The Console Project
 
+Welcome to the AirBnB Clone Project!
 
+## Command Interpreter to manage application objects
 
 <p align="center">This project acknowledges the ALX SE programme and contributors.</p>
 
