@@ -1,56 +1,42 @@
 #!/usr/bin/python3
-"""
-BaseModel module other classes to use from it
-"""
+""" BaseModel Module """
+import uuid
 from datetime import datetime as dt
-from uuid import uuid4
-import models
+import engine.file_storage
+
+storage = engine.file_storage.FileStorage()
 
 
 class BaseModel:
-    """
-    Base Class of AirBnb Console 0x00.
-    """
-
+    """BaseModel Class"""
     def __init__(self, *args, **kwargs):
-        """
-        Init of Object
-        """
-        if len(kwargs) == 0:
-            self.id = str(uuid4())
-            self.created_at = dt.now()
-            self.updated_at = self.created_at
-            models.storage.new(self)
-            models.storage.save()
+        if kwargs != {}:
+            for key in kwargs:
+                if key == "created_at":
+                    self.__dict__["created_at"] = dt.strptime(
+                        kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                elif key == "updated_at":
+                    self.__dict__["updated_at"] = dt.strptime(
+                        kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                else:
+                    if key != "__class__":
+                        self.__dict__[key] = kwargs[key]
         else:
-            kwargs["created_at"] = dt.strptime(kwargs["created_at"],
-                                               "%Y-%m-%dT%H:%M:%S.%f")
-            kwargs["updated_at"] = dt.strptime(kwargs["updated_at"],
-                                               "%Y-%m-%dT%H:%M:%S.%f")
-            for key, val in kwargs.items():
-                if "__class__" not in key:
-                    setattr(self, key, val)
-
-    def __str__(self):
-        """
-        print the instance
-        """
-        return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
-                                         self.__dict__)
+            self.id = str(uuid.uuid4())
+            self.created_at = dt.now()
+            self.updated_at = dt.now()
+            storage.new(self)
 
     def save(self):
-        """
-            updates the public instance attribute
-        """
-        self.updated_at = dt.now()
-        models.storage.save()
+        if self.created_at != dt.now():
+            self.updated_at = dt.now()
+            storage.save()
 
     def to_dict(self):
-        """
-            returns a dictionary containing all keys/values
-        """
-        temp = dict(self.__dict__)
-        temp['__class__'] = self.__class__.__name__
-        temp['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        temp['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        return temp
+        self.__dict__["__class__"] = self.__class__.__name__
+        self.__dict__["created_at"] = self.created_at.isoformat("T")
+        self.__dict__["updated_at"] = self.updated_at.isoformat("T")
+        return self.__dict__
+
+    def __str__(self):
+        return (f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}")
