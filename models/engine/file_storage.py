@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """
 FileStorage that serializes and deserializes instances to a JSON file
 """
