@@ -1,9 +1,12 @@
 .places {
   text-align: center;
+  display:flex;
+  flex-wrap: wrap;
 }
 .places h1 {
   font-size: 30px;
   text-align: left;
+  width: 100%;
 }
 article {
   width: 390px;
@@ -14,6 +17,8 @@ article {
   display: inline-block;
   min-height: 250px;
   vertical-align: top;
+  text-align: center;
+  position: relative;
 }
 article h2 {
   font-size: 30px;
@@ -36,6 +41,8 @@ div.information {
   height: 80px;
   border-top: 1px solid #DDDDDD;
   border-bottom: 1px solid #DDDDDD;
+  display: flex;
+  justify-content: center;
 }
 div.max_guest,
 div.number_rooms,
