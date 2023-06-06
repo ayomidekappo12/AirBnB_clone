@@ -9,6 +9,9 @@ section.filters {
     width: 100%;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
 }
 section.filters button {
     background-color: #FF5A5F;
@@ -19,7 +22,7 @@ section.filters button {
     font-size: 18px;
     color: #FFFFFF;
     float: right;
-    margin: 11px 30px;
+    margin: auto 30px;
 }
 section.filters button:hover {
     opacity: .9;
@@ -30,6 +33,11 @@ section.filters button:hover {
     height: 100%;
     width: 25%;
     float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    
 }
 .locations {
     border-right: 1px solid #DDDDDD;
@@ -42,6 +50,7 @@ section.filters button:hover {
     margin-bottom: 0px;
     text-align: left;
     margin-left: 30px;
+    color: #000;
 }
 .locations h4,
 .amenities h4 {
@@ -51,6 +60,7 @@ section.filters button:hover {
     margin-bottom: 0px;
     text-align: left;
     margin-left: 30px;
+    color: #000;
 }
 /* display location and amenities options upon hover */
 .popover {
@@ -60,6 +70,9 @@ section.filters button:hover {
     border-radius: 4px;
     position: relative;
     z-index: 1;
+    margin-top: 70px;
+    box-sizing: border-box;
+    width: 100%;
 }
 .popover h2 {
     font-size: 16px;
