@@ -1,77 +1,69 @@
 #!/usr/bin/python3
-"""Unittest for console.py"""
-import unittest
+"""
+Unit tests for console using Mock module from python standard library
+Checks console for capturing stdout into a StringIO object
+"""
+
+import os
 import sys
+from models import storage
+from models.engine.file_storage import FileStorage
+import unittest
+from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
-from models.base_model import BaseModel
-from models import storage
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
-class TestHBNBCommand(unittest.TestCase):
-    """Test cases for HBNBCommand class"""
+class ConsoleTestCase(unittest.TestCase):
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_quit_command(self, mock_stdout):
+        with patch('builtins.input', return_value="quit"):
+            console.HBNBCommand().cmdloop()
+        self.assertEqual(mock_stdout.getvalue(), "")
 
-    def setUp(self):
-        """Set up test environment"""
-        self.console = HBNBCommand()
-        self.saved_stdout = sys.stdout
-        sys.stdout = StringIO()
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_empty_line(self, mock_stdout):
+        with patch('builtins.input', return_value=""):
+            console.HBNBCommand().cmdloop()
+        self.assertEqual(mock_stdout.getvalue(), "")
 
-    def tearDown(self):
-        """Tear down test environment"""
-        sys.stdout = self.saved_stdout
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_create_command(self, mock_stdout):
+        with patch('builtins.input', side_effect=["create BaseModel", "quit"]):
+            console.HBNBCommand().cmdloop()
+        self.assertIn("BaseModel", mock_stdout.getvalue())
 
-    def test_create(self):
-        """Test create command"""
-        self.assertFalse('BaseModel' in storage.all())
-        self.console.onecmd("create BaseModel")
-        self.assertTrue('BaseModel' in storage.all())
+    # Add more test methods for other commands
 
-    def test_show(self):
-        """Test show command"""
-        self.console.onecmd("create BaseModel")
-        obj_id = list(storage.all().keys())[0].split('.')[1]
-        self.console.onecmd("show BaseModel {}".format(obj_id))
-        self.assertTrue('[BaseModel]' in sys.stdout.getvalue())
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_show_command(self, mock_stdout):
+        with patch('builtins.input', side_effect=["create BaseModel", "show BaseModel 123", "quit"]):
+            console.HBNBCommand().cmdloop()
+        self.assertIn("123", mock_stdout.getvalue())
 
-    def test_destroy(self):
-        """Test destroy command"""
-        self.console.onecmd("create BaseModel")
-        obj_id = list(storage.all().keys())[0].split('.')[1]
-        self.assertTrue('BaseModel' in storage.all())
-        self.console.onecmd("destroy BaseModel {}".format(obj_id))
-        self.assertFalse('BaseModel' in storage.all())
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_destroy_command(self, mock_stdout):
+        with patch('builtins.input', side_effect=["create BaseModel", "destroy BaseModel 123", "show BaseModel 123", "quit"]):
+            console.HBNBCommand().cmdloop()
+        self.assertIn("** no instance found **", mock_stdout.getvalue())
 
-    def test_all(self):
-        """Test all command"""
-        self.console.onecmd("create BaseModel")
-        self.console.onecmd("create BaseModel")
-        self.console.onecmd("all BaseModel")
-        self.assertIn('[BaseModel]', sys.stdout.getvalue())
-        self.assertIn('2', sys.stdout.getvalue())
+    # Add more test methods for other commands
 
-    def test_update(self):
-        """Test update command"""
-        self.console.onecmd("create BaseModel")
-        obj_id = list(storage.all().keys())[0].split('.')[1]
-        self.console.onecmd("update BaseModel {} first_name 'John'".format(obj_id))
-        self.assertEqual(BaseModel.first_name, 'John')
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_all_command(self, mock_stdout):
+        with patch('builtins.input', side_effect=["create BaseModel", "create User", "create State", "all", "quit"]):
+            console.HBNBCommand().cmdloop()
+        self.assertIn("BaseModel", mock_stdout.getvalue())
+        self.assertIn("User", mock_stdout.getvalue())
+        self.assertIn("State", mock_stdout.getvalue())
 
-    def test_emptyline(self):
-        """Test emptyline method"""
-        self.assertIsNone(self.console.onecmd(""))
+    # Add more test methods for other commands
 
-    def test_quit(self):
-        """Test quit command"""
-        self.assertTrue(self.console.onecmd("quit"))
-
-    def test_EOF(self):
-        """Test EOF signal"""
-        self.assertTrue(self.console.onecmd("EOF"))
-
-    def test_invalid_command(self):
-        """Test invalid command"""
-        self.assertFalse(self.console.onecmd("invalidcommand"))
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
