@@ -292,7 +292,7 @@ class HBNBCommand(cmd.Cmd):
                 if len(parts) > 1:
                     class_name = parts[0]
                     args = parts[1][:-1]
-                    return f"{class_name} {args}"
+                    return "{} {}".format(class_name, args)
 
         return line
 
